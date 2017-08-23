@@ -38,11 +38,11 @@ it('should find the total number of leads for every marketing source in a guest 
     }];
 
     const marketingSourcesNames = analyzer.getMarketingSources(testGuestCards);
-    let marketingSourceObjects = analyzer.makeMarketingSourceObjects(marketingSourcesNames);
-    marketingSourceObjects = analyzer.getTotalLeases(marketingSourceObjects, testGuestCards);
+    const marketingSourceObjects = analyzer.makeMarketingSourceObjects(marketingSourcesNames);
+    analyzer.getTotalLeads(marketingSourceObjects, testGuestCards);
 
-    expect(marketingSourceObjects['Rentlix.com'].totalLeads).toBe(2);
-    expect(marketingSourceObjects['Craigslist.com'].totalLeads).toBe(3);
+    expect(marketingSourceObjects[0].totalLeads).toBe(2);
+    expect(marketingSourceObjects[1].totalLeads).toBe(3);
 });
 
 it.skip('should take an array of cards and return another array of analyzes objects', () => {

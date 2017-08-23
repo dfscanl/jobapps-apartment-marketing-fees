@@ -10,6 +10,14 @@ const makeMarketingSourceObjects =
         return newSourceObject;
     });
 
+const getTotalLeads = (marketingSourceObjects, guestCards) => {
+    marketingSourceObjects.forEach((marketingSource) => {
+        marketingSource.totalLeads = guestCards.filter(
+            guestCard => guestCard.marketing_source === marketingSource.name
+        ).length;
+    });
+};
+
 const analyze = (guestCards) => {
     console.log(guestCards.length);
 
@@ -19,3 +27,4 @@ const analyze = (guestCards) => {
 module.exports.analyze = analyze;
 module.exports.getMarketingSources = getMarketingSources;
 module.exports.makeMarketingSourceObjects = makeMarketingSourceObjects;
+module.exports.getTotalLeads = getTotalLeads;
