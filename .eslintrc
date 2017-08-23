@@ -15,7 +15,6 @@
         "semi": ["error", "always"],
         "space-infix-ops": ["error", {"int32Hint": false}],
         "react/jsx-curly-spacing": [2, "always"],
-        "react/jsx-filename-extension": [1, { "extension": [".js", ".jsx"] }],
         "react/prop-types": [0, { "ignore": [], "customValidators": [] }],
         "no-console": "off",
         "template-curly-spacing": ["error", "always"]
