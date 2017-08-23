@@ -45,6 +45,37 @@ it('should find the total number of leads for every marketing source in a guest 
     expect(marketingSourceObjects[1].totalLeads).toBe(3);
 });
 
+it('should get the number of signed leases for every marketing source', () => {
+    const testGuestCards = [{
+        marketing_source: 'Rentlix.com',
+        first_seen: '2014-04-01',
+        lease_signed: '2014-08-16'
+    }, {
+        marketing_source: 'Craigslist.com',
+        first_seen: '2014-04-01',
+        lease_signed: '2014-05-06'
+    }, {
+        marketing_source: 'Rentlix.com',
+        first_seen: '2014-04-01',
+        lease_signed: null
+    }, {
+        marketing_source: 'Craigslist.com',
+        first_seen: '2014-04-01',
+        lease_signed: null
+    }, {
+        marketing_source: 'Craigslist.com',
+        first_seen: '2014-04-01',
+        lease_signed: '2014-04-16'
+    }];
+
+    const marketingSourcesNames = analyzer.getMarketingSources(testGuestCards);
+    const marketingSourceObjects = analyzer.makeMarketingSourceObjects(marketingSourcesNames);
+    analyzer.getSignedLeases(marketingSourceObjects, testGuestCards);
+
+    expect(marketingSourceObjects[0].signedLeases).toBe(1);
+    expect(marketingSourceObjects[1].signedLeases).toBe(2);
+});
+
 it.skip('should take an array of cards and return another array of analyzes objects', () => {
     const testGuestCards = [{
         id: 1819911,
