@@ -18,14 +18,23 @@ const getTotalLeads = (marketingSourceObjects, guestCards) => {
     });
 };
 
-const marketingSourcesWithKnownCostStructures = [
-    'Apartment Guide',
-    'Apartments.com',
-    'Rent.com',
-    'For Rent',
-    'Craigslist.com',
-    'Resident Referral'
-];
+// const marketingSourcesWithKnownCostStructures = [
+//     'Apartment Guide',
+//     'Apartments.com',
+//     'Rent.com',
+//     'For Rent',
+//     'Craigslist.com',
+//     'Resident Referral'
+// ];
+
+const getSignedLeases = (marketingSourceObjects, guestCards) => {
+    marketingSourceObjects.forEach((marketingSource) => {
+        marketingSource.signedLeases = guestCards.filter(
+            guestCard => guestCard.marketing_source === marketingSource.name
+                && guestCard.lease_signed !== null
+        ).length;
+    });
+};
 
 const analyze = (guestCards) => {
     console.log(guestCards.length);
@@ -37,3 +46,4 @@ module.exports.analyze = analyze;
 module.exports.getMarketingSources = getMarketingSources;
 module.exports.makeMarketingSourceObjects = makeMarketingSourceObjects;
 module.exports.getTotalLeads = getTotalLeads;
+module.exports.getSignedLeases = getSignedLeases;
