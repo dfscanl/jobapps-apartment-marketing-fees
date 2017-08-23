@@ -1,3 +1,6 @@
+const analyzer = require('./src/analyzeGuestCards');
 const guestCards = require('./guest_cards.json');
 
-console.log(guestCards.length);
+const marketingSources = analyzer.getMarketingSources(guestCards);
+
+console.log(marketingSources);

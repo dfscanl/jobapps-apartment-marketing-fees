@@ -18,6 +18,15 @@ const getTotalLeads = (marketingSourceObjects, guestCards) => {
     });
 };
 
+const marketingSourcesWithKnownCostStructures = [
+    'Apartment Guide',
+    'Apartments.com',
+    'Rent.com',
+    'For Rent',
+    'Craigslist.com',
+    'Resident Referral'
+];
+
 const analyze = (guestCards) => {
     console.log(guestCards.length);
 
