@@ -38,6 +38,20 @@ it('should take an array of cards and return a list of unique marketing sources'
     expect(marketingSources[1]).toBe('Craigslist.com');
 });
 
+it('should take array of marketing sources and return objects', () => {
+    const marketingSourcesNames = ['Rentlix.com', 'Craigslist.com'];
+
+    const marketingSourceObjects = analyzer.makeMarketingSourceObjects(marketingSourcesNames);
+
+    expect(marketingSourceObjects.length).toBe(2);
+    expect(marketingSourceObjects[0].name).toBe('Rentlix.com');
+    expect(marketingSourceObjects[1].name).toBe('Craigslist.com');
+});
+
+it.skip('should find the total number of leads for every marketing source in a guest card array', () => {
+
+});
+
 it.skip('should take an array of cards and return another array of analyzes objects', () => {
     const testGuestCards = [{
         id: 1819911,
