@@ -18,14 +18,31 @@ const getTotalLeads = (marketingSourceObjects, guestCards) => {
     });
 };
 
-// const marketingSourcesWithKnownCostStructures = [
-//     'Apartment Guide',
-//     'Apartments.com',
-//     'Rent.com',
-//     'For Rent',
-//     'Craigslist.com',
-//     'Resident Referral'
-// ];
+const marketingSourcesWithKnownCostStructures = [{
+    marketingSource: 'Apartment Guide',
+    calculateTotalCost: (numberOfLeads, numberOfSignedLeases) => 495 * 3,
+    calculateCostPerLead: (numberOfLeads, numberOfSignedLeases) => 495 * 3 / numberOfLeads
+}, {
+    marketingSource: 'Apartments.com',
+    calculateTotalCost: (numberOfLeads, numberOfSignedLeases) => 295 * numberOfSignedLeases,
+    calculateCostPerLead: (numberOfLeads, numberOfSignedLeases) => 295 * numberOfSignedLeases / numberOfLeads
+}, {
+    marketingSource: 'Rent.com',
+    calculateTotalCost: (numberOfLeads, numberOfSignedLeases) => max(595, .5 + numberOfSignedLeases),
+    calculateCostPerLead: (numberOfLeads, numberOfSignedLeases) => max(595, .5 + numberOfSignedLeases) / numberOfLeads
+}, {
+    marketingSource: 'For Rent',
+    calculateTotalCost: (numberOfLeads, numberOfSignedLeases) => 195 * 3 + (25 * numberOfLeads),
+    calculateCostPerLead: (numberOfLeads, numberOfSignedLeases) => (195 * 3 + (25 * numberOfLeads)) / numberOfLeads
+}, {
+    marketingSource: 'Craigslist.com',
+    calculateTotalCost: (numberOfLeads, numberOfSignedLeases) => 0,
+    calculateCostPerLead: (numberOfLeads, numberOfSignedLeases) => 0
+}, {
+    marketingSource: 'Resident Referral',
+    calculateTotalCost: (numberOfLeads, numberOfSignedLeases) => 500 * numberOfSignedLeases,
+    calculateCostPerLead: (numberOfLeads, numberOfSignedLeases) => 500 * numberOfSignedLeases / numberOfLeads
+];
 
 const getSignedLeases = (marketingSourceObjects, guestCards) => {
     marketingSourceObjects.forEach((marketingSource) => {
