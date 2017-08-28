@@ -145,13 +145,13 @@ it('should calculate the best marketing source by dollar spent per lead cost wit
 
     const testAnalytics = analyzer.analyze(testGuestCards);
 
-    expect(testAnalytics['Q1 2013'].results.length).toBe(2);
+    expect(testAnalytics.length).toBe(2);
 
-    const testFinalOutputString = analyzer.compileToOutputString(testAnalytics['Q1 2013']);
-    const expectedString = `Q1 2013-03
+    // const testFinalOutputString = analyzer.compileToOutputString(testAnalytics['Q1 2013']);
+    const expectedString = `Q1 2013:
 
-1. Craigslist.com - total leads: 2, signed leases: 1, total cost: $0.00, avg cost per lead: $0.00
+1. Craigslist.com - total leads: 2, signed leases: 2, total cost: $0.00, avg cost per lead: $0.00
 2. Rent.com - total leads: 2, signed leases: 2, total cost: $595.00, avg cost per lead: $297.50`;
 
-    expect(testFinalOutputString).toBe(expectedString);
+    expect(testAnalytics[0]).toBe(expectedString);
 });
