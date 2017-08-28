@@ -100,12 +100,15 @@ it('should build a new object where cards are sorted by quarters', () => {
     }];
 
     const quarterObjects = analyzer.createQuarterObjects(testGuestCards);
-    const marketingSourcesNames = analyzer.getMarketingSources(testGuestCards);
-    analyzer.addMarketingSourcesToQuarterObjects(quarterObjects, marketingSourcesNames);
 
-    expect(quarterObjects['Q1 2013'].length).toBe(1);
-    expect(quarterObjects['Q1 2013']).toBe({ 'Rentlix.com': [{ first_seen: '2013-02-01', lease_signed: '2013-03-16' }] });
+    expect(quarterObjects['Q1 2013']['Rentlix.com'].length).toBe(1);
+    expect(quarterObjects['Q1 2013']['Rentlix.com'][0].marketing_source).toBe('Rentlix.com');
+    expect(quarterObjects['Q1 2013']['Rentlix.com'][0].first_seen).toBe('2013-02-01');
+    expect(quarterObjects['Q1 2013']['Rentlix.com'][0].lease_signed).toBe('2013-03-16');
+
     expect(quarterObjects['Q3 2013']).toBe(undefined);
+
+    expect(quarterObjects['Q1 2014']['Craigslist.com'].length).toBe(1);
 });
 
 it.skip('should take an array of cards and return another array of analyzes objects', () => {
