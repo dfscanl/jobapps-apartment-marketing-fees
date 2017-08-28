@@ -10,7 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "lodash": "^4.17.4",
-    "moment": "^2.18.1"
+    "moment": "^2.18.1",
+    "numeral": "^2.0.6"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",

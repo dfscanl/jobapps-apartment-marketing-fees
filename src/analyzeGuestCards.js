@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const moment = require('moment');
+const numeral = require('numeral');
 
 const getMarketingSources =
     guestCards => _.uniq(guestCards.map(guestCard => guestCard.marketing_source));
@@ -31,9 +32,9 @@ const marketingSourcesWithKnownCostStructures = [{
 }, {
     marketingSource: 'Rent.com',
     calculateTotalCost: (numberOfLeads, numberOfSignedLeases) =>
-        Math.max(595, 0.5 + numberOfSignedLeases),
+        Math.max(595, 595 * 0.5 * numberOfSignedLeases),
     calculateCostPerLead: (numberOfLeads, numberOfSignedLeases) =>
-        Math.max(595, 0.5 + numberOfSignedLeases) / numberOfLeads
+        Math.max(595, 595 * 0.5 * numberOfSignedLeases) / numberOfLeads
 }, {
     marketingSource: 'For Rent',
     calculateTotalCost: numberOfLeads => (195 * 3) + (25 * numberOfLeads),
@@ -95,9 +96,46 @@ const createQuarterObjects = (guestCards) => {
 };
 
 const analyze = (guestCards) => {
-    console.log(guestCards.length);
+    const quarterObjects = createQuarterObjects(guestCards);
+    const quarters = Object.keys(quarterObjects);
 
-    return [];
+    return quarters.map((quarter) => {
+        const sources = quarterObjects[quarter];
+        const sourcesInQuarter = Object.keys(sources);
+        const sourceObjects = makeMarketingSourceObjects(sourcesInQuarter);
+
+        const sourceTotals = sourcesInQuarter
+            .filter(source => marketingSourcesWithKnownCostStructures
+                .find(marketingSource => source === marketingSource.marketingSource))
+            .map((source) => {
+                const sourceTotal = { name: source };
+                const costStructure = marketingSourcesWithKnownCostStructures
+                    .find(marketingSource => source === marketingSource.marketingSource);
+
+                const cardsFromSourceInQuarter = sources[source];
+                getTotalLeads(sourceObjects, cardsFromSourceInQuarter);
+                getSignedLeases(sourceObjects, cardsFromSourceInQuarter);
+                const sourceInfo = sourceObjects.find(obj => obj.name === source);
+
+                sourceTotal.totalLeads = sourceInfo.totalLeads;
+                sourceTotal.signedLeases = sourceInfo.signedLeases;
+                sourceTotal.totalCost = costStructure
+                    .calculateTotalCost(sourceTotal.totalLeads, sourceTotal.signedLeases);
+                sourceTotal.averageCost = costStructure
+                    .calculateCostPerLead(sourceTotal.totalLeads, sourceTotal.signedLeases);
+
+                return sourceTotal;
+            });
+
+        sourceTotals.sort((a, b) => a.averageCost - b.averageCost);
+        const totalStrings = sourceTotals.map((source, index) => `\n${ index + 1 }. ${ source.name } - total leads: ${ source.totalLeads }, signed leases: ${ source.signedLeases }, total cost: ${ numeral(source.totalCost).format('$0,0.00') }, avg cost per lead: ${ numeral(source.averageCost).format('$0,0.00') }`);
+
+        const stringLeadIn = `${ quarter }:\n`;
+        const responseString = totalStrings
+            .reduce((response, currentString) => response + currentString, stringLeadIn);
+
+        return responseString;
+    });
 };
 
 module.exports.analyze = analyze;
