@@ -124,24 +124,34 @@ it('should put a card with first_seen and lease_signed dates in different quarte
     expect(quarterObjects['Q3 2013']['Rentlix.com'].length).toBe(1);
 });
 
-it.skip('should take an array of cards and return another array of analyzes objects', () => {
+it('should calculate the best marketing source by dollar spent per lead cost within a quarter', () => {
     const testGuestCards = [{
-        id: 1819911,
-        first_seen: '2014-04-07',
-        expected_move_in: '2014-05-01',
-        shown_unit: null,
-        agent_id: 3519,
+        first_seen: '2013-01-01',
         marketing_source: 'Craigslist.com',
-        application_submitted: null,
-        application_approved: null,
-        application_denied: null,
-        application_canceled: null,
-        lease_signed: null,
-        resident_rent: null,
-        unit_name: null
+        lease_signed: '2013-03-01'
+    }, {
+        first_seen: '2013-02-07',
+        marketing_source: 'Craigslist.com',
+        lease_signed: '2013-05-09'
+    }, {
+        first_seen: '2013-02-01',
+        marketing_source: 'Rent.com',
+        lease_signed: '2013-03-09'
+    }, {
+        first_seen: '2013-01-16',
+        marketing_source: 'Rent.com',
+        lease_signed: '2013-03-01'
     }];
 
     const testAnalytics = analyzer.analyze(testGuestCards);
 
-    expect(testAnalytics.length).toBe(0);
+    expect(testAnalytics['Q1 2013'].results.length).toBe(2);
+
+    const testFinalOutputString = analyzer.compileToOutputString(testAnalytics['Q1 2013']);
+    const expectedString = `Q1 2013-03
+
+1. Craigslist.com - total leads: 2, signed leases: 1, total cost: $0.00, avg cost per lead: $0.00
+2. Rent.com - total leads: 2, signed leases: 2, total cost: $595.00, avg cost per lead: $297.50`;
+
+    expect(testFinalOutputString).toBe(expectedString);
 });
