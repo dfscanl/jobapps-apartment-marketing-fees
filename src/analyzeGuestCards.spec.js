@@ -120,8 +120,8 @@ it('should put a card with first_seen and lease_signed dates in different quarte
 
     const quarterObjects = analyzer.createQuarterObjects(testGuestCards);
 
-    expect(quarterObjects['Q1 2013']['Rentlix.com']).toBe(1);
-    expect(quarterObjects['Q3 2013']['Rentlix.com']).toBe(1);
+    expect(quarterObjects['Q1 2013']['Rentlix.com'].length).toBe(1);
+    expect(quarterObjects['Q3 2013']['Rentlix.com'].length).toBe(1);
 });
 
 it.skip('should take an array of cards and return another array of analyzes objects', () => {
