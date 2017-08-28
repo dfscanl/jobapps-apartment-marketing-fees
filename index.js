@@ -1,6 +1,8 @@
 const analyzer = require('./src/analyzeGuestCards');
 const guestCards = require('./guest_cards.json');
 
-const marketingSources = analyzer.getMarketingSources(guestCards);
+const analytics = analyzer.analyze(guestCards);
 
-console.log(marketingSources);
+const finalResult = analytics.reduce((total, current) => `${ current }\n\n`, '');
+
+console.log(finalResult);
