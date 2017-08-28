@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const moment = require('moment');
 
 const getMarketingSources =
     guestCards => _.uniq(guestCards.map(guestCard => guestCard.marketing_source));
@@ -57,6 +58,33 @@ const getSignedLeases = (marketingSourceObjects, guestCards) => {
     });
 };
 
+const getQuarterFromDate = (date) => {
+    const year = date.year();
+    const quarter = date.utc().quarter();
+
+    return `Q${ quarter } ${ year }`;
+};
+
+const createQuarterObjects = (guestCards) => {
+    const quarterObjects = {};
+
+    guestCards.forEach((guestCard) => {
+        const quarterFromDate = getQuarterFromDate(moment(guestCard.first_seen));
+
+        if (quarterObjects[quarterFromDate] === undefined) {
+            quarterObjects[quarterFromDate] = {};
+        }
+
+        if (quarterObjects[quarterFromDate][guestCard.marketing_source] === undefined) {
+            quarterObjects[quarterFromDate][guestCard.marketing_source] = [];
+        }
+
+        quarterObjects[quarterFromDate][guestCard.marketing_source].push(guestCard);
+    });
+
+    return quarterObjects;
+};
+
 const analyze = (guestCards) => {
     console.log(guestCards.length);
 
@@ -69,3 +97,4 @@ module.exports.makeMarketingSourceObjects = makeMarketingSourceObjects;
 module.exports.getTotalLeads = getTotalLeads;
 module.exports.getSignedLeases = getSignedLeases;
 module.exports.marketingSourcesWithKnownCostStructures = marketingSourcesWithKnownCostStructures;
+module.exports.createQuarterObjects = createQuarterObjects;
