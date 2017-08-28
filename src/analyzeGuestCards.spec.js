@@ -76,6 +76,38 @@ it('should get the number of signed leases for every marketing source', () => {
     expect(marketingSourceObjects[1].signedLeases).toBe(2);
 });
 
+it('should build a new object where cards are sorted by quarters', () => {
+    const testGuestCards = [{
+        marketing_source: 'Rentlix.com',
+        first_seen: '2013-02-01',
+        lease_signed: '2013-03-16'
+    }, {
+        marketing_source: 'Craigslist.com',
+        first_seen: '2013-04-01',
+        lease_signed: '2013-06-06'
+    }, {
+        marketing_source: 'Rentlix.com',
+        first_seen: '2014-04-01',
+        lease_signed: null
+    }, {
+        marketing_source: 'Craigslist.com',
+        first_seen: '2014-01-01',
+        lease_signed: null
+    }, {
+        marketing_source: 'Craigslist.com',
+        first_seen: '2014-08-01',
+        lease_signed: '2014-09-16'
+    }];
+
+    const quarterObjects = analyzer.createQuarterObjects(testGuestCards);
+    const marketingSourcesNames = analyzer.getMarketingSources(testGuestCards);
+    analyzer.addMarketingSourcesToQuarterObjects(quarterObjects, marketingSourcesNames);
+
+    expect(quarterObjects['Q1 2013'].length).toBe(1);
+    expect(quarterObjects['Q1 2013']).toBe({ 'Rentlix.com': [{ first_seen: '2013-02-01', lease_signed: '2013-03-16' }] });
+    expect(quarterObjects['Q3 2013']).toBe(undefined);
+});
+
 it.skip('should take an array of cards and return another array of analyzes objects', () => {
     const testGuestCards = [{
         id: 1819911,
