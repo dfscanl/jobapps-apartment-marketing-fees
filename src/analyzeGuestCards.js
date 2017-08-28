@@ -65,21 +65,30 @@ const getQuarterFromDate = (date) => {
     return `Q${ quarter } ${ year }`;
 };
 
+const addCardToQuarterAtDate = (quarterObjects, guestCard, dateToCheck) => {
+    const quarterFromDate = getQuarterFromDate(moment(dateToCheck));
+
+    if (quarterObjects[quarterFromDate] === undefined) {
+        quarterObjects[quarterFromDate] = {};
+    }
+
+    if (quarterObjects[quarterFromDate][guestCard.marketing_source] === undefined) {
+        quarterObjects[quarterFromDate][guestCard.marketing_source] = [];
+    }
+
+    quarterObjects[quarterFromDate][guestCard.marketing_source].push(guestCard);
+};
+
 const createQuarterObjects = (guestCards) => {
     const quarterObjects = {};
 
     guestCards.forEach((guestCard) => {
-        const quarterFromDate = getQuarterFromDate(moment(guestCard.first_seen));
+        addCardToQuarterAtDate(quarterObjects, guestCard, guestCard.first_seen);
 
-        if (quarterObjects[quarterFromDate] === undefined) {
-            quarterObjects[quarterFromDate] = {};
+        if (getQuarterFromDate(moment(guestCard.first_seen))
+            !== getQuarterFromDate(moment(guestCard.lease_signed))) {
+            addCardToQuarterAtDate(quarterObjects, guestCard, guestCard.lease_signed);
         }
-
-        if (quarterObjects[quarterFromDate][guestCard.marketing_source] === undefined) {
-            quarterObjects[quarterFromDate][guestCard.marketing_source] = [];
-        }
-
-        quarterObjects[quarterFromDate][guestCard.marketing_source].push(guestCard);
     });
 
     return quarterObjects;
